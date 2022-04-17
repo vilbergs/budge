@@ -1,6 +1,6 @@
 import type { ActionFunction, LoaderFunction } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
-import { Form, useCatch, useLoaderData } from '@remix-run/react'
+import { Form, Link, useCatch, useLoaderData } from '@remix-run/react'
 import invariant from 'tiny-invariant'
 
 import type { Transaction } from '~/models/transaction.server'
@@ -40,7 +40,10 @@ export default function TransactionDetailsPage() {
 
   return (
     <div>
-      <h3 className="text-2xl font-bold">{data.transaction.title}</h3>
+      <Link to="/transactions" className="text-blue-500 underline">
+        {'<-'} Back to transactions
+      </Link>
+      <h3 className="mt-4 text-2xl font-bold">{data.transaction.title}</h3>
       <p className="py-6">{data.transaction.amount}</p>
       <hr className="my-4" />
       <Form method="post">
