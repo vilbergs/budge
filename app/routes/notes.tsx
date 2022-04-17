@@ -1,24 +1,24 @@
-import type { LoaderFunction } from "@remix-run/node";
-import { json } from "@remix-run/node";
-import { Form, Link, NavLink, Outlet, useLoaderData } from "@remix-run/react";
+import type { LoaderFunction } from '@remix-run/node'
+import { json } from '@remix-run/node'
+import { Form, Link, NavLink, Outlet, useLoaderData } from '@remix-run/react'
 
-import { requireUserId } from "~/session.server";
-import { useUser } from "~/utils";
-import { getTransactionListItems } from "~/models/transaction.server";
+import { requireUserId } from '~/session.server'
+import { useUser } from '~/utils'
+import { getTransactionListItems } from '~/models/transaction.server'
 
 type LoaderData = {
-  transactions: Awaited<ReturnType<typeof getTransactionListItems>>;
-};
+  transactions: Awaited<ReturnType<typeof getTransactionListItems>>
+}
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const userId = await requireUserId(request);
-  const transactions = await getTransactionListItems({ userId });
-  return json<LoaderData>({ transactions });
-};
+  const userId = await requireUserId(request)
+  const transactions = await getTransactionListItems({ userId })
+  return json<LoaderData>({ transactions })
+}
 
 export default function NotesPage() {
-  const data = useLoaderData() as LoaderData;
-  const user = useUser();
+  const data = useLoaderData() as LoaderData
+  const user = useUser()
 
   return (
     <div className="flex h-full min-h-screen flex-col">
@@ -53,7 +53,7 @@ export default function NotesPage() {
                 <li key={note.id}>
                   <NavLink
                     className={({ isActive }) =>
-                      `block border-b p-4 text-xl ${isActive ? "bg-white" : ""}`
+                      `block border-b p-4 text-xl ${isActive ? 'bg-white' : ''}`
                     }
                     to={note.id}
                   >
@@ -70,5 +70,5 @@ export default function NotesPage() {
         </div>
       </main>
     </div>
-  );
+  )
 }
