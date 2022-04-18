@@ -141,13 +141,15 @@ export default function App() {
                         </button>
                       </div>
                     </Transition.Child>
-                    <div className="flex flex-shrink-0 items-center px-4">
-                      <img
-                        className="h-8 w-auto"
-                        src="https://tailwindui.com/img/logos/workflow-logo-indigo-600-mark-gray-800-text.svg"
-                        alt="Workflow"
-                      />
-                    </div>
+                    <Link
+                      to="/dashboard"
+                      className="flex flex-shrink-0 items-center  space-x-3 px-6"
+                    >
+                      <span className="text-4xl">💸 </span>
+                      <span className="text-2xl  font-bold italic text-green-500">
+                        BUDGE
+                      </span>
+                    </Link>
                     <div className="mt-5 h-0 flex-1 overflow-y-auto">
                       <nav className="space-y-1 px-2">
                         {navigation.map((item) => (
@@ -187,13 +189,15 @@ export default function App() {
             <div className="hidden md:fixed md:inset-y-0 md:flex md:w-64 md:flex-col">
               {/* Sidebar component, swap this element with another sidebar if you like */}
               <div className="flex flex-grow flex-col overflow-y-auto border-r border-gray-200 bg-white pt-5">
-                <div className="flex flex-shrink-0 items-center px-4">
-                  <img
-                    className="h-8 w-auto"
-                    src="https://tailwindui.com/img/logos/workflow-logo-indigo-600-mark-gray-800-text.svg"
-                    alt="Workflow"
-                  />
-                </div>
+                <Link
+                  to="/dashboard"
+                  className="flex flex-shrink-0 items-center  space-x-3 px-6"
+                >
+                  <span className="text-4xl">💸 </span>
+                  <span className="text-2xl  font-bold italic text-green-500">
+                    BUDGE
+                  </span>
+                </Link>
                 <div className="mt-5 flex flex-grow flex-col">
                   <nav className="flex-1 space-y-1 px-2 pb-4">
                     {navigation.map((item) => (

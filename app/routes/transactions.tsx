@@ -130,7 +130,7 @@ export default function NotesPage() {
 
   return (
     <div className="flex min-h-0 flex-1 flex-col bg-white sm:flex-row">
-      <div className="block sm:hidden">
+      <div className="block overflow-auto rounded-xl bg-white p-5 shadow ring-1 ring-black ring-opacity-5 sm:hidden">
         <Outlet />
       </div>
       <div className="basis flex min-h-0 flex-1 flex-col border-r border-gray-200 bg-white">
@@ -233,7 +233,7 @@ export default function NotesPage() {
           </nav>
         </div>
       </div>
-      <div className="flex w-full bg-gray-100 p-10">
+      <div className="hidden w-full bg-gray-100 p-10 sm:flex">
         <div className="flex-1 overflow-auto rounded-xl bg-white p-5 shadow ring-1 ring-black ring-opacity-5">
           <Outlet />
         </div>
