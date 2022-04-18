@@ -39,6 +39,7 @@ model Transaction {
   id    String @id @default(cuid())
   title String
   amount Decimal @db.Decimal(12, 2)
+  date DateTime
   note  String?
 
   type TransactionType

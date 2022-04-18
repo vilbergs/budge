@@ -90,7 +90,7 @@ export default function App() {
         {!user ? (
           <Outlet />
         ) : (
-          <div>
+          <div className="flex h-screen flex-col">
             <Transition.Root show={sidebarOpen} as={Fragment}>
               <Dialog
                 as="div"
@@ -223,7 +223,7 @@ export default function App() {
                 </div>
               </div>
             </div>
-            <div className="flex flex-1 flex-col md:pl-64">
+            <div className="flex min-h-0 flex-1 flex-col md:pl-64">
               <div className="sticky top-0 z-10 flex h-16 flex-shrink-0 bg-white shadow">
                 <button
                   type="button"
@@ -324,8 +324,10 @@ export default function App() {
                   </div>
                 </div>
               </div>
-
-              <main className="flex-1">
+              <div className="flex min-h-0 max-w-full flex-1 flex-col ">
+                <Outlet />
+              </div>
+              {/* <main className="flex min-h-0 flex-1 flex-col">
                 <div className="py-6">
                   <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
                     <h1 className="text-2xl font-semibold text-gray-900">
@@ -333,11 +335,10 @@ export default function App() {
                         '??'}
                     </h1>
                   </div>
-                  <div className="mx-auto mt-8 max-w-7xl px-4 sm:px-6 md:px-8">
-                    <Outlet />
+                  <div className="mx-auto mt-8 max-w-7xl flex-1 basis-0 overflow-hidden px-4 sm:px-6 md:px-8">
                   </div>
                 </div>
-              </main>
+              </main> */}
             </div>
           </div>
         )}
