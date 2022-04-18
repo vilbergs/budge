@@ -140,7 +140,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     const changeType = change.value >= 0 ? 'increase' : 'decrease'
 
     return {
-      change: `${change.value}%`,
+      change: `${isFinite(change.value) ? change.value : 0}%`,
       changeType,
     }
   }
