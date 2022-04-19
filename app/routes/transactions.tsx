@@ -183,7 +183,7 @@ export default function NotesPage() {
             ))}
           </div>
         </div>
-        <div className="hidden items-center justify-between p-2 px-4 sm:flex">
+        <div className="flex items-center justify-between p-2 px-4">
           <Link
             to="/transactions/new"
             className="inline-flex items-center rounded-full border border-transparent bg-indigo-600 p-3 text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
