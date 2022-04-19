@@ -41,7 +41,6 @@ type ChangeType =
   | 'negative-increase'
   | 'positive-decrease'
   | 'negative-decrease'
-  | 'none'
 
 const sumTransactionsByType = (
   transactions: Pick<Transaction, 'amount' | 'type'>[]
@@ -176,7 +175,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 
     return {
       change: isFinite(change.value) ? `${change.value}%` : 'n/a',
-      changeType: isFinite(change.value) ? changeType : 'none',
+      changeType,
     }
   }
 
@@ -250,46 +249,50 @@ export default function Dashboard() {
                   </span>
                 </div>
 
-                <div
-                  className={classNames(
-                    ['positive-increase', 'positive-decrease'].includes(
+                {item.change !== 'n/a' && (
+                  <div
+                    className={classNames(
+                      ['positive-increase', 'positive-decrease'].includes(
+                        item.changeType
+                      )
+                        ? 'bg-green-100 text-green-800'
+                        : 'bg-red-100 text-red-800',
+                      'inline-flex items-baseline rounded-full px-2.5 py-0.5 text-sm font-medium md:mt-2 lg:mt-0'
+                    )}
+                  >
+                    {['positive-increase', 'negative-increase'].includes(
                       item.changeType
-                    )
-                      ? 'bg-green-100 text-green-800'
-                      : 'bg-red-100 text-red-800',
-                    'inline-flex items-baseline rounded-full px-2.5 py-0.5 text-sm font-medium md:mt-2 lg:mt-0'
-                  )}
-                >
-                  {['positive-increase', 'negative-increase'].includes(
-                    item.changeType
-                  ) ? (
-                    <ArrowSmUpIcon
-                      className={classNames(
-                        item.changeType === 'positive-increase'
-                          ? ' text-green-800'
-                          : ' text-red-800',
-                        '-ml-1 mr-0.5 h-5 w-5 flex-shrink-0 self-center'
-                      )}
-                      aria-hidden="true"
-                    />
-                  ) : (
-                    <ArrowSmDownIcon
-                      className={classNames(
-                        item.changeType === 'positive-decrease'
-                          ? ' text-green-800'
-                          : ' text-red-800',
-                        '-ml-1 mr-0.5 h-5 w-5 flex-shrink-0 self-center'
-                      )}
-                      aria-hidden="true"
-                    />
-                  )}
+                    ) ? (
+                      <ArrowSmUpIcon
+                        className={classNames(
+                          item.changeType === 'positive-increase'
+                            ? ' text-green-800'
+                            : ' text-red-800',
+                          '-ml-1 mr-0.5 h-5 w-5 flex-shrink-0 self-center'
+                        )}
+                        aria-hidden="true"
+                      />
+                    ) : (
+                      <ArrowSmDownIcon
+                        className={classNames(
+                          item.changeType === 'positive-decrease'
+                            ? ' text-green-800'
+                            : ' text-red-800',
+                          '-ml-1 mr-0.5 h-5 w-5 flex-shrink-0 self-center'
+                        )}
+                        aria-hidden="true"
+                      />
+                    )}
 
-                  <span className="sr-only">
-                    {item.changeType === 'increase' ? 'Increased' : 'Decreased'}{' '}
-                    by
-                  </span>
-                  {item.change}
-                </div>
+                    <span className="sr-only">
+                      {item.changeType === 'increase'
+                        ? 'Increased'
+                        : 'Decreased'}{' '}
+                      by
+                    </span>
+                    {item.change}
+                  </div>
+                )}
               </dd>
             </div>
           ))}
