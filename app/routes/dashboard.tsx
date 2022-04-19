@@ -41,6 +41,7 @@ type ChangeType =
   | 'negative-increase'
   | 'positive-decrease'
   | 'negative-decrease'
+  | 'none'
 
 const sumTransactionsByType = (
   transactions: Pick<Transaction, 'amount' | 'type'>[]
@@ -175,7 +176,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 
     return {
       change: isFinite(change.value) ? `${change.value}%` : 'n/a',
-      changeType,
+      changeType: isFinite(change.value) ? changeType : 'none',
     }
   }
 
