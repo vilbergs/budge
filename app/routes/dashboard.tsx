@@ -100,7 +100,7 @@ export const loader: LoaderFunction = async ({ request }) => {
       switch (transaction.type) {
         case TransactionType.EXPENSE:
           map[month][TransactionType.EXPENSE] =
-            map[month][TransactionType.EXPENSE].subtract(amount)
+            map[month][TransactionType.EXPENSE].add(amount)
           break
         case TransactionType.INCOME:
           map[month][TransactionType.INCOME] =
