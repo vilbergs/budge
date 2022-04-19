@@ -36,6 +36,12 @@ interface LoaderData {
   >
 }
 
+type ChangeType =
+  | 'positive-increase'
+  | 'negative-increase'
+  | 'positive-decrease'
+  | 'negative-decrease'
+
 const sumTransactionsByType = (
   transactions: Pick<Transaction, 'amount' | 'type'>[]
 ) =>
@@ -46,7 +52,7 @@ const sumTransactionsByType = (
       switch (transaction.type) {
         case TransactionType.EXPENSE:
           map[TransactionType.EXPENSE] =
-            map[TransactionType.EXPENSE].add(amount)
+            map[TransactionType.EXPENSE].subtract(amount)
 
           return map
         case TransactionType.INCOME:
@@ -146,10 +152,26 @@ export const loader: LoaderFunction = async ({ request }) => {
       })
   )
 
-  const calculateChange = (original: currency, newAmount: currency) => {
+  const calculateChange = (
+    original: currency,
+    newAmount: currency,
+    type?: TransactionType
+  ): {
+    change: string
+    changeType: ChangeType
+  } => {
     const change = newAmount.subtract(original).divide(original).multiply(100)
 
-    const changeType = change.value >= 0 ? 'increase' : 'decrease'
+    let changeType: ChangeType =
+      change.value >= 0 ? 'positive-increase' : 'negative-decrease'
+
+    if (type === TransactionType.EXPENSE) {
+      changeType = change.value >= 0 ? 'negative-increase' : 'positive-decrease'
+    }
+
+    if (type === TransactionType.INCOME) {
+      changeType = change.value >= 0 ? 'positive-increase' : 'negative-decrease'
+    }
 
     return {
       change: `${isFinite(change.value) ? change.value : 0}%`,
@@ -171,7 +193,8 @@ export const loader: LoaderFunction = async ({ request }) => {
       previousStat: sumOfPreviousThirtyDays.EXPENSE,
       ...calculateChange(
         sumOfPreviousThirtyDays.EXPENSE,
-        sumOfLastThirtyDays.EXPENSE
+        sumOfLastThirtyDays.EXPENSE,
+        TransactionType.EXPENSE
       ),
     },
     {
@@ -180,13 +203,14 @@ export const loader: LoaderFunction = async ({ request }) => {
       previousStat: sumOfPreviousThirtyDays.INCOME,
       ...calculateChange(
         sumOfPreviousThirtyDays.INCOME,
-        sumOfLastThirtyDays.INCOME
+        sumOfLastThirtyDays.INCOME,
+        TransactionType.INCOME
       ),
     },
     {
       name: 'Total Result',
-      stat: sumOfLastThirtyDays.INCOME.subtract(sumOfLastThirtyDays.EXPENSE),
-      previousStat: sumOfPreviousThirtyDays.INCOME.subtract(
+      stat: sumOfLastThirtyDays.INCOME.add(sumOfLastThirtyDays.EXPENSE),
+      previousStat: sumOfPreviousThirtyDays.INCOME.add(
         sumOfPreviousThirtyDays.EXPENSE
       ),
       ...calculateChange(
@@ -218,8 +242,8 @@ export default function Dashboard() {
                 {item.name}
               </dt>
               <dd className="mt-1 flex items-baseline justify-between md:block lg:flex">
-                <div className="flex items-baseline text-2xl font-semibold text-indigo-600">
-                  {item.stat}
+                <div className="flex items-baseline text-2xl font-semibold ">
+                  <Amount amount={item.stat} />
                   <span className="ml-2 text-sm font-medium text-gray-500">
                     from {item.previousStat}
                   </span>
@@ -227,20 +251,34 @@ export default function Dashboard() {
 
                 <div
                   className={classNames(
-                    item.changeType === 'increase'
+                    ['positive-increase', 'positive-decrease'].includes(
+                      item.changeType
+                    )
                       ? 'bg-green-100 text-green-800'
                       : 'bg-red-100 text-red-800',
                     'inline-flex items-baseline rounded-full px-2.5 py-0.5 text-sm font-medium md:mt-2 lg:mt-0'
                   )}
                 >
-                  {item.changeType === 'increase' ? (
+                  {['positive-increase', 'negative-increase'].includes(
+                    item.changeType
+                  ) ? (
                     <ArrowSmUpIcon
-                      className="-ml-1 mr-0.5 h-5 w-5 flex-shrink-0 self-center text-green-500"
+                      className={classNames(
+                        item.changeType === 'positive-increase'
+                          ? ' text-green-800'
+                          : ' text-red-800',
+                        '-ml-1 mr-0.5 h-5 w-5 flex-shrink-0 self-center'
+                      )}
                       aria-hidden="true"
                     />
                   ) : (
                     <ArrowSmDownIcon
-                      className="-ml-1 mr-0.5 h-5 w-5 flex-shrink-0 self-center text-red-500"
+                      className={classNames(
+                        item.changeType === 'positive-decrease'
+                          ? ' text-green-800'
+                          : ' text-red-800',
+                        '-ml-1 mr-0.5 h-5 w-5 flex-shrink-0 self-center'
+                      )}
                       aria-hidden="true"
                     />
                   )}
@@ -271,7 +309,6 @@ export default function Dashboard() {
                   <span>{month}</span>
                   <Amount amount={INCOME} />
                   <Amount amount={EXPENSE} />
-                  {}
                   <Amount amount={total} />
                 </li>
               )
