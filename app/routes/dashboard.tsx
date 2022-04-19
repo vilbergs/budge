@@ -100,7 +100,7 @@ export const loader: LoaderFunction = async ({ request }) => {
       switch (transaction.type) {
         case TransactionType.EXPENSE:
           map[month][TransactionType.EXPENSE] =
-            map[month][TransactionType.EXPENSE].add(amount)
+            map[month][TransactionType.EXPENSE].subtract(amount)
           break
         case TransactionType.INCOME:
           map[month][TransactionType.INCOME] =
@@ -110,7 +110,9 @@ export const loader: LoaderFunction = async ({ request }) => {
           break
       }
 
-      map[month].total = map[month][TransactionType.INCOME].subtract(
+      // TODO - Fix the adding negative numbers weirdness. I'mostly doing this out of convenience as the currency objects lose their functionality when they are sent across to the client.
+      // We're adding expense to income here as EXPENSE Will be a negative value
+      map[month].total = map[month][TransactionType.INCOME].add(
         map[month][TransactionType.EXPENSE]
       )
 
