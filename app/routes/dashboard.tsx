@@ -174,7 +174,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     }
 
     return {
-      change: `${isFinite(change.value) ? change.value : 0}%`,
+      change: isFinite(change.value) ? `${change.value}%` : 'n/a',
       changeType,
     }
   }
